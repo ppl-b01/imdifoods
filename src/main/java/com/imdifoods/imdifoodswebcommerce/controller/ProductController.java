@@ -1,5 +1,6 @@
 package com.imdifoods.imdifoodswebcommerce.controller;
 
+import com.imdifoods.imdifoodswebcommerce.model.Product;
 import com.imdifoods.imdifoodswebcommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,13 @@ public class ProductController {
                               @RequestParam("stock") int stock,
                               @RequestParam("price") int price,
                               @RequestParam("image") MultipartFile imageFile) {
+        Product product = Product.builder()
+                .name(name)
+                .description(description)
+                .stock(stock)
+                .price(price)
+                .build();
+        productService.saveProduct(product,imageFile);
         return "createProduct";
     }
 }
