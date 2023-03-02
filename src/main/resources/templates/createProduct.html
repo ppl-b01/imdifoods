@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h2>Tambah Produk</h2>
-                <form method="post" th:action="@{/product/add}">
+                <form method="post" th:action="@{/product/add}" enctype="multipart/form-data">
                     <p>Nama Produk</p>
                     <input type="text" name="name" placeholder="Nama produk...">
                     <p>Deskripsi</p>
@@ -19,6 +19,8 @@
                     <input type="number" name="price" placeholder="Contoh: Rp100.000">
                     <p>Stok</p>
                     <input type="number" name="stock" placeholder="Contoh: 100">
+                    <br>
+                    <input type="file" name="image" accept="image/*">
                     <br>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
