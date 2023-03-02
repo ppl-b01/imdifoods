@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ProductController.class)
-class ProductControllerTest {
+public class ProductControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -29,14 +29,14 @@ class ProductControllerTest {
     }
 
     @Test
-    void getAddProductTest() throws Exception {
+    public void getAddProductTest() throws Exception {
         // when
         mvc.perform(get("/product/add"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void postAddProductTest() throws Exception {
+    public void postAddProductTest() throws Exception {
         MockMultipartFile file = new MockMultipartFile(
                 "image",           // name of the file input field in the form
                 "mockImage.jpg",   // original file name

@@ -10,13 +10,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.io.IOException;
 
 @SpringBootTest
-class ProductServiceTest {
+public class ProductServiceTest {
     @Autowired
     private ProductService productService;
 
     private Product product;
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         product = Product.builder()
                 .name("Ayam")
                 .description("Makanan spesial")
@@ -26,7 +26,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void saveProduct_WithImage() throws IOException {
+    public void saveProduct_WithImage() throws IOException {
         MockMultipartFile file = new MockMultipartFile(
                 "image",           // name of the file input field in the form
                 "mockImage.jpg",   // original file name
@@ -37,7 +37,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void saveProduct_WithoutImage() throws IOException {
+    public void saveProduct_WithoutImage() throws IOException {
         MockMultipartFile file = null;
         productService.saveProduct(product, file);
     }

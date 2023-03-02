@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ProductTest {
 
     @Test
-    void productBuilderTest() {
+    public void productBuilderTest() {
         Product product = Product.builder()
                 .name("Ayam")
                 .description("Makanan spesial")
