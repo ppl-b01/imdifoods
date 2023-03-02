@@ -5,7 +5,6 @@ import lombok.*;
 
 @Generated
 @Entity
-@Table(name = "Product")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
