@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -26,7 +28,7 @@ public class ProductController {
                               @RequestParam("description") String description,
                               @RequestParam("stock") int stock,
                               @RequestParam("price") int price,
-                              @RequestParam("image") MultipartFile imageFile) {
+                              @RequestParam("image") MultipartFile imageFile) throws IOException {
         Product product = Product.builder()
                 .name(name)
                 .description(description)
