@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ImdifoodsWebcommerceApplicationTests {
+public class ImdifoodsWebcommerceApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
+        ImdifoodsWebcommerceApplication.main(new String[] {});
     }
 
 }
