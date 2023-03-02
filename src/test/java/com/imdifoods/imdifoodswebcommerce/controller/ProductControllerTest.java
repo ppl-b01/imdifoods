@@ -36,7 +36,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void saveProductTest() throws Exception {
+    void postAddProductTest() throws Exception {
         MockMultipartFile file = new MockMultipartFile(
                 "image",           // name of the file input field in the form
                 "mockImage.jpg",   // original file name
