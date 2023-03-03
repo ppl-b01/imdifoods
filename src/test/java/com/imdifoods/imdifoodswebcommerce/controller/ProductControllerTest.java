@@ -1,5 +1,6 @@
 package com.imdifoods.imdifoodswebcommerce.controller;
 
+import com.imdifoods.imdifoodswebcommerce.model.Product;
 import com.imdifoods.imdifoodswebcommerce.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +32,6 @@ public class ProductControllerTest {
 
     @Test
     public void getAddProductTest() throws Exception {
-        // when
         mvc.perform(get("/product/add"))
                 .andExpect(status().isOk());
     }
@@ -54,5 +55,15 @@ public class ProductControllerTest {
 
         mvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+
+        Product product = Product.builder()
+                .name("mockName")
+                .description("mockDescription")
+                .stock(1)
+                .price(2)
+                .build();
+
+        when(productService.saveProduct(product, file)).thenReturn(product);
+        verify(productService).saveProduct(product, file);
     }
 }

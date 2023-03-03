@@ -21,9 +21,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product, MultipartFile imageFile) throws IOException{
-        if (imageFile == null) {
-            return product;
+        if (imageFile.isEmpty()) {
+            return null;
         }
+        // Write the image to local machine
         Files.createDirectories(Paths.get(UPLOAD_DIRECTORY));
         Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, String.valueOf(product.getId()));
         Files.write(fileNameAndPath, imageFile.getBytes());

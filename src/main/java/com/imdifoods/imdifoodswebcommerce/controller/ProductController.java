@@ -4,6 +4,7 @@ import com.imdifoods.imdifoodswebcommerce.model.Product;
 import com.imdifoods.imdifoodswebcommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,8 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String saveProduct(@RequestParam("name") String name,
+    public String saveProduct(Model model,
+                              @RequestParam("name") String name,
                               @RequestParam("description") String description,
                               @RequestParam("stock") int stock,
                               @RequestParam("price") int price,
@@ -35,7 +37,10 @@ public class ProductController {
                 .stock(stock)
                 .price(price)
                 .build();
-        productService.saveProduct(product,imageFile);
+        product = productService.saveProduct(product,imageFile);
+        if (product == null) {
+            model.addAttribute("msg", "Please submit a file.");
+        }
         return "createProduct";
     }
 }
