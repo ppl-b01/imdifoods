@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2>Tambah Produk</h2>
+                <form method="post" th:action="@{/product/add}" enctype="multipart/form-data">
+                    <p>Nama Produk</p>
+                    <input type="text" name="name" placeholder="Nama produk..." value="1">
+                    <p>Deskripsi</p>
+                    <input type="text" name="description" placeholder="Deskripsi produk..." value="2">
+                    <p>Harga</p>
+                    <input type="number" name="price" placeholder="Contoh: Rp100.000" value="3">
+                    <p>Stok</p>
+                    <input type="number" name="stock" placeholder="Contoh: 100" value="4">
+                    <br>
+                    <input type="file" name="image" accept="image/*">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+                <span th:if="${msg != null}" th:text="${msg}"></span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
