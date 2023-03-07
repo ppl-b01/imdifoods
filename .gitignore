@@ -35,4 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
-uploads
+.env!/.env
+!/.env
+/.env
