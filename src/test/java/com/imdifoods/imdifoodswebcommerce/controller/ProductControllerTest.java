@@ -1,6 +1,6 @@
 package com.imdifoods.imdifoodswebcommerce.controller;
 
-import com.imdifoods.imdifoodswebcommerce.model.Product;
+import com.imdifoods.imdifoodswebcommerce.service.CloudinaryService;
 import com.imdifoods.imdifoodswebcommerce.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,31 +13,40 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ProductController.class)
-public class ProductControllerTest {
+class ProductControllerTest {
     @Autowired
     private MockMvc mvc;
+    @MockBean
+    private CloudinaryService cloudinaryService;
 
     @MockBean
     private ProductService productService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void getAddProductTest() throws Exception {
+    void getAddProductTest() throws Exception {
         mvc.perform(get("/product/add"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void postAddProductTest() throws Exception {
+    void whenImageUploadFail_ShouldDisplayPreviousData() throws Exception {
+        String name = "mockName";
+        String description = "mockDescription";
+        int stock = 3;
+        Double price = 10000.0;
+
         MockMultipartFile file = new MockMultipartFile(
                 "image",           // name of the file input field in the form
                 "mockImage.jpg",   // original file name
@@ -48,22 +57,45 @@ public class ProductControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .multipart("/product/add")
                 .file(file)
-                .param("name","mockName")
-                .param("description","mockDescription")
-                .param("stock","1")
-                .param("price","2");
+                .param("name",name)
+                .param("description",description)
+                .param("stock",String.valueOf(stock))
+                .param("price",String.valueOf(price));
 
         mvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+        verify(cloudinaryService).uploadImage(file);
+    }
 
-        Product product = Product.builder()
-                .name("mockName")
-                .description("mockDescription")
-                .stock(1)
-                .price(2)
-                .build();
+    @Test
+    void whenImageUploadSuccess_ShouldSaveProduct() throws Exception {
+        String name = "mockName";
+        String description = "mockDescription";
+        int stock = 3;
+        Double price = 10000.0;
+        String imageId = "imageId";
 
-        when(productService.saveProduct(product, file)).thenReturn(product);
-        verify(productService).saveProduct(product, file);
+        MockMultipartFile file = new MockMultipartFile(
+                "image",           // name of the file input field in the form
+                "mockImage.jpg",   // original file name
+                "multipart/form-data",     // content type of the file
+                "mockContent".getBytes() // content of the file
+        );
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .multipart("/product/add")
+                .file(file)
+                .param("name",name)
+                .param("description",description)
+                .param("stock",String.valueOf(stock))
+                .param("price",String.valueOf(price));
+
+        when(cloudinaryService.uploadImage(file)).thenReturn(imageId);
+        mvc.perform(requestBuilder)
+                .andExpect(status().isOk());
+
+        verify(cloudinaryService).uploadImage(file);
+        verify(cloudinaryService).getImageUrl(imageId);
+        verify(productService).saveProduct(anyString(),anyString(),anyInt(),anyDouble(),anyString());
     }
 }
