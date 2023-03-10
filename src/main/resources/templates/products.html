@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+
+<h1>Products</h1>
+<div th:if="${pageMaker.endPage == 0}">
+    No Data
+</div>
+<div th:unless="${pageMaker.endPage == 0}">
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Nama Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+        </tr>
+        <tr th:each="product,itrStatus : ${products}" th:id="${product.id}">
+            <td th:text="${itrStatus.count + countStart}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.stock}"></td>
+        </tr>
+    </table>
+    <div th:if="${products.totalPages != 1}">
+        <p>
+            <span>
+                <a class="pageLink" th:href="@{/product(page=1)}">&laquo;</a>
+            </span>
+            <span>
+                <a class="pageLink" th:href="@{/product(page=${products.number})}">&larr;</a>
+            </span>
+            <span th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                <a th:href="@{/product(page=${page})}" th:text="${page}"></a>
+            </span>
+            <span>
+                <a th:href="@{/product(page=${products.number + 2})}">&rarr;</a>
+            </span>
+            <span>
+                <a th:href="@{/product(page=${products.totalPages})}">&raquo;</a>
+            </span>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

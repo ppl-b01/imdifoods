@@ -6,9 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProductServiceTest {
@@ -27,5 +35,21 @@ class ProductServiceTest {
 
         productService.saveProduct(name, description, stock, price, imageId);
         verify(productRepository).save(any(Product.class));
+    }
+
+    @Test
+    void testGetAllPageable() {
+        int itemCount = 5;
+
+        List<Product> mockProducts = new ArrayList<>();
+        for (int i = 0; i< itemCount; i++) {
+            mockProducts.add(new Product());
+        }
+
+        Page<Product> mockPage = new PageImpl<>(mockProducts);
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(mockPage);
+
+        Page<Product> products = productService.getAllPageable(1, itemCount);
+        assertEquals(itemCount, products.getContent().size());
     }
 }
