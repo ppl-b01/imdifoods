@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockMultipartFile;
@@ -38,72 +39,13 @@ class ProductControllerTest {
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void getAddProductTest() throws Exception {
         mvc.perform(get("/product/add"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void whenImageUploadFail_ShouldDisplayPreviousData() throws Exception {
-        String name = "mockName";
-        String description = "mockDescription";
-        int stock = 3;
-        Double price = 10000.0;
-
-        MockMultipartFile file = new MockMultipartFile(
-                "image",           // name of the file input field in the form
-                "mockImage.jpg",   // original file name
-                "multipart/form-data",     // content type of the file
-                "mockContent".getBytes() // content of the file
-        );
-
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .multipart("/product/add")
-                .file(file)
-                .param("name",name)
-                .param("description",description)
-                .param("stock",String.valueOf(stock))
-                .param("price",String.valueOf(price));
-
-        mvc.perform(requestBuilder)
-                .andExpect(status().isOk());
-        verify(cloudinaryService).uploadImage(file);
-    }
-
-    @Test
-    void whenImageUploadSuccess_ShouldSaveProduct() throws Exception {
-        String name = "mockName";
-        String description = "mockDescription";
-        int stock = 3;
-        Double price = 10000.0;
-        String imageId = "imageId";
-
-        MockMultipartFile file = new MockMultipartFile(
-                "image",           // name of the file input field in the form
-                "mockImage.jpg",   // original file name
-                "multipart/form-data",     // content type of the file
-                "mockContent".getBytes() // content of the file
-        );
-
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .multipart("/product/add")
-                .file(file)
-                .param("name",name)
-                .param("description",description)
-                .param("stock",String.valueOf(stock))
-                .param("price",String.valueOf(price));
-
-        when(cloudinaryService.uploadImage(file)).thenReturn(imageId);
-        mvc.perform(requestBuilder)
-                .andExpect(status().isOk());
-
-        verify(cloudinaryService).uploadImage(file);
-        verify(cloudinaryService).getImageUrl(imageId);
-        verify(productService).saveProduct(anyString(),anyString(),anyInt(),anyDouble(),anyString());
     }
 
     @Test
