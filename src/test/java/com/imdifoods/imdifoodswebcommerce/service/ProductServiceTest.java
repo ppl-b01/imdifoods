@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
@@ -32,9 +33,19 @@ class ProductServiceTest {
         int stock = 3;
         Double price = 10000.0;
         String imageId = "imageId";
+        Product product = productService.saveProduct(name, description, stock, price, imageId);
+        verify(productRepository).save(product);
+    }
 
-        productService.saveProduct(name, description, stock, price, imageId);
-        verify(productRepository).save(any(Product.class));
+    @Test
+    void saveInvalidProduct(){
+        String name = "";
+        String description = "";
+        int stock = -3;
+        Double price = -10000.0;
+        String imageId = "";
+
+        assertThrows(IllegalArgumentException.class, () -> productService.saveProduct(name, description, stock, price, imageId));
     }
 
     @Test
