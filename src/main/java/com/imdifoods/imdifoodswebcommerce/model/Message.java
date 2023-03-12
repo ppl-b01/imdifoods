@@ -19,11 +19,16 @@ public class Message {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "isi")
-    private String isi;
+    @Column(name = "message")
+    private String message;
 
     @Column(name = "email")
     private String email;
+
+    public Message(String email, String message) {
+        this.email = email;
+        this.message = message;
+    }
 
     @Override
     public boolean equals(Object o) {
