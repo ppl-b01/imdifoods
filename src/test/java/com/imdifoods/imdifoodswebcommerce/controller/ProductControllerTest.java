@@ -81,4 +81,10 @@ class ProductControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(status().isFound());
     }
+
+    @Test
+    public void getUpdateProductTest() throws Exception {
+        mvc.perform(get("/product/update"))
+                .andExpect(status().isOk());
+    }
 }
