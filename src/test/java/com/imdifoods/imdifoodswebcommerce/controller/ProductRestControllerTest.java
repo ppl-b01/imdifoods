@@ -1,5 +1,6 @@
 package com.imdifoods.imdifoodswebcommerce.controller;
 
+import com.imdifoods.imdifoodswebcommerce.model.Product;
 import com.imdifoods.imdifoodswebcommerce.service.CloudinaryService;
 import com.imdifoods.imdifoodswebcommerce.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,34 +25,34 @@ class ProductRestControllerTest {
     private ProductService productService;
     @MockBean
     private CloudinaryService cloudinaryService;
+
+    private final String NAME = "mockName";
+    private final String DESCRIPTION = "mockDescription";
+    private final int STOCK = 3;
+    private final Double PRICE = 10000.0;
+    private final String IMAGE_ID = "imageId";
+    private final MockMultipartFile FILE = new MockMultipartFile(
+            "image",           // name of the file input field in the form
+            "mockImage.jpg",   // original file name
+            "multipart/form-data",     // content type of the file
+            "mockContent".getBytes() // content of the file
+    );
+
     @Test
     void whenImageUploadSuccess_ShouldSaveProduct() throws Exception {
-        String name = "mockName";
-        String description = "mockDescription";
-        int stock = 3;
-        Double price = 10000.0;
-        String imageId = "imageId";
-
-        MockMultipartFile file = new MockMultipartFile(
-                "image",           // name of the file input field in the form
-                "mockImage.jpg",   // original file name
-                "multipart/form-data",     // content type of the file
-                "mockContent".getBytes() // content of the file
-        );
-
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .multipart("/product/add")
-                .file(file)
-                .param("name",name)
-                .param("description",description)
-                .param("stock",String.valueOf(stock))
-                .param("price",String.valueOf(price));
+                .file(FILE)
+                .param("name", NAME)
+                .param("description", DESCRIPTION)
+                .param("stock", String.valueOf(STOCK))
+                .param("price", String.valueOf(PRICE));
 
-        when(cloudinaryService.uploadImage(file)).thenReturn(imageId);
+        when(cloudinaryService.uploadImage(FILE)).thenReturn(IMAGE_ID);
         mvc.perform(requestBuilder)
                 .andExpect(status().isOk());
 
-        verify(cloudinaryService).uploadImage(file);
-        verify(productService).saveProduct(name,description,stock,price,imageId);
+        verify(cloudinaryService).uploadImage(FILE);
+        verify(productService).saveProduct(NAME, DESCRIPTION, STOCK, PRICE, IMAGE_ID);
     }
 }
