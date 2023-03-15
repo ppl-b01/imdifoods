@@ -48,28 +48,5 @@
         </form>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script>
-        $("form#form-message").submit(function () {
-            let senderEmail = document.getElementById("sender-email").value;
-            let senderMessage = document.getElementById("sender-message").value;
-            $.ajax({
-                method: 'POST',
-                url: "/message/send",
-                data: {
-                    "sender-email": senderEmail,
-                    "sender-message": senderMessage
-                },
-                dataType: "json",
-                cache: false,
-                success: function () {
-                    alert("Message sent!");
-                    $("form#form-message")[0].reset();
-                },
-                error: function () {
-                    alert("Failed sending message");
-                }
-            });
-            return false;
-        });
-    </script>
+    <script th:src="@{/js/footer.js}" src="../../static/js/footer.js"></script>
 </footer>
