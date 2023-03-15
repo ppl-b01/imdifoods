@@ -12,7 +12,10 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message saveMessage(String email, String message) {
-        Message messageObject = new Message(email, message);
+        Message messageObject = Message.builder()
+                .email(email)
+                .message(message)
+                .build();
         messageRepository.save(messageObject);
         return messageObject;
     }
